@@ -29,13 +29,10 @@
 					}
 					else {
 						echo '<h3>posty '.$cur_cat.'</h3>';
-						$myposts = get_posts(array('numberposts' => 5, 'offset' => 0, 'category' => $cur_cat, 'post_type' => 'any', 'post_status'=>'publish'));
-						print_r($myposts);
-						foreach($myposts as $post){
-							print_r($post);
-							
-						}
-						
+						$myposts = new WP_Query(array('numberposts' => 5, 'offset' => 0, 'category' => $cur_cat, 'post_type' => 'any', 'post_status'=>'publish'));
+						while($myposts->have_posts()): $myposts->the_post();
+
+						endwhile;
 					}
 					wp_pagenavi();
 					
