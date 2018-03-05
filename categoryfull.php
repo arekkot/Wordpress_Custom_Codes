@@ -29,12 +29,23 @@
 					}
 					else {
 						echo '<h3>posty '.$cur_cat.'</h3>';
-						$myposts = new WP_Query(array('numberposts' => 5, 'offset' => 0, 'category' => $cur_cat, 'post_type' => 'any', 'post_status'=>'publish'));
-						while($myposts->have_posts()): $myposts->the_post();
-
-						endwhile;
+						$paged = (get_query_var('paged') === 0)? 1 : get_query_var('paged');
+						print_r($paged);
+						$myposts = new WP_Query(array('posts_per_page' => 100, 'paged' => $paged, 'cat' => $cur_cat, 'post_type' => 'any', 'post_status'=>'publish'));
+						while($myposts->have_posts()): $myposts->the_post(); ?> 
+						
+						<h2><?php the_title();?></h2>
+						<a href="<?php the_permalink();?>" title="<?php the_title();?>"><?php the_title();?></a>
+												
+						<?php 
+							 //print_r($post);
+						endwhile;?>
+ 
+						<?php
+						wp_pagenavi( array( 'query' => $myposts ) );
+						wp_reset_postdata();
 					}
-					wp_pagenavi();
+					
 					
 				}
 				
