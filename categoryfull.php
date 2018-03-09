@@ -1,3 +1,4 @@
+
 <?php get_header(); ?>
 
 <main class="container" role="main" id="main">
@@ -37,6 +38,11 @@
 							}
 						} 
 						else {
+
+							function wpdocs_custom_excerpt_length( $length ) {
+							    return 20;
+							}
+							add_filter( 'excerpt_length', 'wpdocs_custom_excerpt_length', 999 );
 							
 							$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1; $args = array( 'posts_per_page' => get_option('posts_per_page'), 'paged' => $paged, );
 							$myposts = new WP_Query(
@@ -59,7 +65,7 @@
 									</div>
 									<div class="singleElementPodzial">
 										<h3 class="singleAktualnoscInfoBoxTitle"><?php the_title();?></h3>
-										<p class="singleAktualnoscInfoBoxExcerpt"><?php echo mb_substr(($post -> post_content),0 ,240); ?></p>
+										<p class="singleAktualnoscInfoBoxExcerpt"><?php the_excerpt(); ?></p>
 										<a href="<?php the_permalink();?>" class="singleAktualnoscInfoBoxMore displayBlock">więcej &gt;</a>
 									</div>
 								</article> 
@@ -69,7 +75,8 @@
 	 
 							<?php						
 								wp_pagenavi( array( 'query' => $myposts ) );
-								wp_reset_postdata();	
+								wp_reset_postdata();
+								remove_filter( 'excerpt_length', 'wpdocs_custom_excerpt_length');	
 						}
 					}
 				?>				 
